@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+    
+    <entry>
+      <title><![CDATA[HTML5(H5)]]></title>
+      <url>%2F2017%2F02%2F27%2FHTML5%2F</url>
+      <content type="text"><![CDATA[HTML5(H5) 它是HTML的新一代规范，在原有的HTML4基础上增加了很多的有助于开发的内容；现在如果其他人提到H5，不仅仅是HTML5，他们的意思是问，你会响应式布局开发以及移动端webApp开发吗？ 新增一些构建页面语义化结构的标签 header footer main article section figure figcaption nav aside（广告栏…） … 以上的这些标签在IE低版本浏览器中不兼容，我们需要引入“html5.min.js”来处理兼容（原理：在IE低版本浏览器中对于不兼容的标签把他们替换成兼容的标签）123&lt;!--[if it IE 9]&gt;&lt;script type=&apos;text/javascript&apos; src=&apos;html5.min.js&apos;&gt;&lt;/script&gt;&lt;![endif]&gt; 对原有标签有一些修改 center、font这些不常用的标签已经被HTML5标准移除了（不是不能用，只是不具备任何的语义化了） strong之前的版本是加粗的意思，现在的版本虽然看上去还有加粗的效果，但是语义化是朗读的时候重点突出 hr之前的版本是一条直线，现在的版本效果上还是一条线，但是代表的是区域分割 small之前的版本是字体变小，现在的版本是附属细则 新增加一些文本标识标签 time mark address … 对于表单的升级 传统的表单 form input:text/password/button/submit/reset/radio/checkbox/file/hidden textarea文本域 1234567contendBox&#123; width: 300px; height: 150px; resize: none;/*禁止手动调节大小*/ overflow: hidden;/*内容超过不出现滚动条*/ &#125; &lt;textarea id=&quot;contendBox&quot; cols=&quot;30&quot; rows=&quot;10&quot;&gt;&lt;/textarea&gt; select下拉框 form 新增加的表单元素 progress进度条（一般不用，不好控制样式） input search url emal tel number range color data inout:data tab type=’data’ time 了解新增表单元素的作用 功能强大了 内置了CSS和JS的验证 新增加了placeholder属性，给文本框设置默认的提示 在移动端输入的时候，选择不同的类型，调用出来的虚拟键盘也是不同的，方便用户的输入例如：tel-&gt;数字键盘 新增加的表单元素（或者是input的属性）在IE低版本浏览器中不兼容，placeholder在IE下不兼容，并且没有什么东西可以处理，所以这些表单只应用在移动端 audio &amp;&amp; video（取代了flash）audio是音频标签，支持音频格式 mp3 ogg wav m3u8:直播流video是视频标签，支持的音频格式： mp4 ogg webM m3u8:直播流 以上的格式并不是所有的浏览器都兼容，在移动端最常使用的是MP3/MP4 不管是audio还是video,都有以下这几个属性 controls 是否使用浏览器自带的播放器 preload 设置资源的加载模式 canvas画布绘图 使用cancas可以绘制统计图（柱状、饼状、曲线…） 插件： highcharts echarts webStorage localStorage sessionStorage cookie websocket socket.io通信 长链接 长轮询 一些新的API 获取地理位置 检测横竖屏的]]></content>
+    </entry>
+
+    
+    <entry>
+      <title><![CDATA[JavaScript作用域]]></title>
+      <url>%2F2017%2F02%2F27%2F%E5%B0%8F%E6%80%BB%E7%BB%93%2F</url>
+      <content type="text"><![CDATA[理解 JavaScript 作用域JavaScript作用域 任何程序设计语言都有作用域的概念，简单的说：作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。在JavaScript中，变量的作用域有全局作用域和局部作用域两种。 全局作用域（Global Scope）在代码中任何地方都能访问到的对象拥有全局作用域 最外层函数和在最外层函数外面定义的变量拥有全局作用域，例如： authorName="山边小溪";1234567891011function doSomething()&#123; var blogName=&quot;梦想天空&quot;; function innerSay()&#123; alert(blogName); &#125; innerSay(); &#125;alert(authorName); //山边小溪alert(blogName); //脚本错误doSomething(); //梦想天空innerSay() //脚本错误 所有末定义直接赋值的变量自动声明为拥有全局作用域，例如： doSomething()&#123;1234567 var authorName=&quot;山边小溪&quot;; blogName=&quot;梦想天空&quot;; alert(authorName); &#125;doSomething(); //山边小溪alert(blogName); //梦想天空alert(authorName); //脚本错误 变量blogName拥有全局作用域，而authorName在函数外部无法访问到。 所有window对象的属性拥有全局作用域,一般情况下，window对象的内置属性都拥有全局作用域，例如window.name、window.location、window.top等等。]]></content>
+    </entry>
+
+    
+  
+  
+</search>
