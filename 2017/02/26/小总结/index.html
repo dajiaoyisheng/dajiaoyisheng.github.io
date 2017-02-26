@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="继承是如何实现的
+大多OO语言都支持两种继承方式： 接口继承和实现继承 ，而ECMAScript中无法实现接口继承，ECMAScript只支持实现继承，而且其实现继承主要是依靠 原型链 来实现。
+
+
+原型链基本思想：利用原型让一个引用类型继承另外一个引用类型的属性和方法。构造函数，原型，实例之间的关系：每个构造函数都有一个原型对象，原型对象包含一个指向构造函数的指针，而实例都包含一个指向原型对象的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2017/02/26/小总结/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="继承是如何实现的
+大多OO语言都支持两种继承方式： 接口继承和实现继承 ，而ECMAScript中无法实现接口继承，ECMAScript只支持实现继承，而且其实现继承主要是依靠 原型链 来实现。
+
+
+原型链基本思想：利用原型让一个引用类型继承另外一个引用类型的属性和方法。构造函数，原型，实例之间的关系：每个构造函数都有一个原型对象，原型对象包含一个指向构造函数的指针，而实例都包含一个指向原型对象的">
+<meta property="og:updated_time" content="2017-02-26T09:48:57.475Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="继承是如何实现的
+大多OO语言都支持两种继承方式： 接口继承和实现继承 ，而ECMAScript中无法实现接口继承，ECMAScript只支持实现继承，而且其实现继承主要是依靠 原型链 来实现。
+
+
+原型链基本思想：利用原型让一个引用类型继承另外一个引用类型的属性和方法。构造函数，原型，实例之间的关系：每个构造函数都有一个原型对象，原型对象包含一个指向构造函数的指针，而实例都包含一个指向原型对象的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/26/小总结/"/>
+
+
+
+
+
+  <title>  | Hexo </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/26/小总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T17:48:57+08:00">
+                2017-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="继承是如何实现的"><a href="#继承是如何实现的" class="headerlink" title="继承是如何实现的"></a>继承是如何实现的</h4><blockquote>
+<p>大多OO语言都支持两种继承方式： 接口继承和实现继承 ，而ECMAScript中无法实现接口继承，ECMAScript只支持实现继承，而且其实现继承主要是依靠 <strong>原型链</strong> 来实现。</p>
+</blockquote>
+<ul>
+<li><p>原型链<br>基本思想：利用原型让一个引用类型继承另外一个引用类型的属性和方法。<br>构造函数，原型，实例之间的关系：每个构造函数都有一个原型对象，原型对象包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function SuperType() &#123;</div><div class="line">this.property = true;</div><div class="line">&#125;</div><div class="line">SuperType.prototype.getSuperValue = function() &#123;</div><div class="line">return this.property;</div><div class="line">&#125;</div><div class="line">function subType() &#123;</div><div class="line">this.property = false;</div><div class="line">&#125;</div><div class="line">//继承了SuperType</div><div class="line">SubType.prototype = new SuperType();</div><div class="line">SubType.prototype.getSubValue = function ()&#123;</div><div class="line">return this.property;</div><div class="line">&#125;</div><div class="line">var instance = new SubType();</div><div class="line">console.log(instance.getSuperValue());//true</div></pre></td></tr></table></figure>
+</li>
+<li><p>借用构造函数<br>基本思想：在子类型构造函数的内部调用超类构造函数，通过使用call()和apply()方法可以在新创建的对象上执行构造函数。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function SuperType() &#123;</div><div class="line">this.colors = [&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;];</div><div class="line">&#125;</div><div class="line">function SubType() &#123;</div><div class="line">SuperType.call(this);//继承了SuperType</div><div class="line">&#125;</div><div class="line">var instance1 = new SubType();</div><div class="line">instance1.colors.push(&quot;black&quot;);</div><div class="line">console.log(instance1.colors);//&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;,&quot;black&quot;</div><div class="line">var instance2 = new SubType();</div><div class="line">console.log(instance2.colors);//&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>组合继承<br>基本思想：将原型链和借用构造函数的技术组合在一块，从而发挥两者之长的一种继承模式。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">function SuperType(name) &#123;</div><div class="line">this.name = name;</div><div class="line">this.colors = [&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;];</div><div class="line">&#125;</div><div class="line">SuperType.prototype.sayName = function() &#123;</div><div class="line">console.log(this.name);</div><div class="line">&#125;</div><div class="line">function SubType(name, age) &#123;</div><div class="line">SuperType.call(this,name);//继承属性</div><div class="line">this.age = age;</div><div class="line">&#125;</div><div class="line">//继承方法</div><div class="line">SubType.prototype = new SuperType();</div><div class="line">Subtype.prototype.constructor = Subtype;</div><div class="line">Subtype.prototype.sayAge = function() &#123;</div><div class="line">console.log(this.age);</div><div class="line">&#125;</div><div class="line">var instance1 = new SubType(&quot;EvanChen&quot;,18);</div><div class="line">instance1.colors.push(&quot;black&quot;);</div><div class="line">consol.log(instance1.colors);//&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;,&quot;black&quot;</div><div class="line">instance1.sayName();//&quot;EvanChen&quot;</div><div class="line">instance1.sayAge();//18</div><div class="line">var instance2 = new SubType(&quot;EvanChen666&quot;,20);</div><div class="line">console.log(instance2.colors);//&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;</div><div class="line">instance2.sayName();//&quot;EvanChen666&quot;</div><div class="line">instance2.sayAge();//20</div></pre></td></tr></table></figure>
+</li>
+<li><p>原型式继承<br>基本想法：借助原型可以基于已有的对象创建新对象，同时还不必须因此创建自定义的类型。<br>原型式继承的思想可用以下函数来说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function object(o) &#123;</div><div class="line">function F()&#123;&#125;</div><div class="line">F.prototype = o;</div><div class="line">return new F();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">var person = &#123;</div><div class="line">name:&quot;EvanChen&quot;,</div><div class="line">friends:[&quot;Shelby&quot;,&quot;Court&quot;,&quot;Van&quot;];</div><div class="line">&#125;;</div><div class="line">var anotherPerson = object(person);</div><div class="line">anotherPerson.name = &quot;Greg&quot;;</div><div class="line">anotherPerson.friends.push(&quot;Rob&quot;);</div><div class="line">var yetAnotherPerson = object(person);</div><div class="line">yetAnotherPerson.name = &quot;Linda&quot;;</div><div class="line">yetAnotherPerson.friends.push(&quot;Barbie&quot;);</div><div class="line">console.log(person.friends);//&quot;Shelby&quot;,&quot;Court&quot;,&quot;Van&quot;,&quot;Rob&quot;,&quot;Barbie&quot;</div><div class="line">ECMAScript5通过新增Object.create()方法规范化了原型式继承，这个方法接收两个参数：一个用作新对象原型的对象和一个作为新对象定义额外属性的对象。</div><div class="line">var person = &#123;</div><div class="line">name:&quot;EvanChen&quot;,</div><div class="line">friends:[&quot;Shelby&quot;,&quot;Court&quot;,&quot;Van&quot;];</div><div class="line">&#125;;</div><div class="line">var anotherPerson = Object.create(person);</div><div class="line">anotherPerson.name = &quot;Greg&quot;;</div><div class="line">anotherPerson.friends.push(&quot;Rob&quot;);</div><div class="line">var yetAnotherPerson = Object.create(person);</div><div class="line">yetAnotherPerson.name = &quot;Linda&quot;;</div><div class="line">yetAnotherPerson.friends.push(&quot;Barbie&quot;);</div><div class="line">console.log(person.friends);//&quot;Shelby&quot;,&quot;Court&quot;,&quot;Van&quot;,&quot;Rob&quot;,&quot;Barbie&quot;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>寄生式继承<br>基本思想：创建一个仅用于封装继承过程的函数，该函数在内部以某种方式来增强对象，最后再像真正是它做了所有工作一样返回对象。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function createAnother(original) &#123;</div><div class="line">var clone = object(original);</div><div class="line">clone.sayHi = function () &#123;</div><div class="line">alert(&quot;hi&quot;);</div><div class="line">&#125;;</div><div class="line">return clone;</div><div class="line">&#125;</div><div class="line">var person = &#123;</div><div class="line">name:&quot;EvanChen&quot;,</div><div class="line">friends:[&quot;Shelby&quot;,&quot;Court&quot;,&quot;Van&quot;];</div><div class="line">&#125;;</div><div class="line">var anotherPerson = createAnother(person);</div><div class="line">anotherPerson.sayHi();///&quot;hi&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>寄生组合式继承<br>基本思想：通过借用函数来继承属性，通过原型链的混成形式来继承方法<br>其基本模型如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function inheritProperty(subType, superType) &#123;</div><div class="line">var prototype = object(superType.prototype);//创建对象</div><div class="line">prototype.constructor = subType;//增强对象</div><div class="line">subType.prototype = prototype;//指定对象</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function SuperType(name)&#123;</div><div class="line">this.name = name;</div><div class="line">this.colors = [&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;];</div><div class="line">&#125;</div><div class="line">SuperType.prototype.sayName = function ()&#123;</div><div class="line">alert(this.name);</div><div class="line">&#125;;</div><div class="line">function SubType(name,age)&#123;</div><div class="line">SuperType.call(this,name);</div><div class="line">this.age = age;</div><div class="line">&#125;</div><div class="line">inheritProperty(SubType,SuperType);</div><div class="line">SubType.prototype.sayAge = function() &#123;</div><div class="line">alert(this.age);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h4><p><a href="http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html" target="_blank" rel="external">http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html</a></p>
+<blockquote>
+<p>理解 JavaScript 作用域和作用域链 </p>
+</blockquote>
+<p>JavaScript作用域<br>　　任何程序设计语言都有作用域的概念，简单的说，作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。在JavaScript中，变量的作用域有全局作用域和局部作用域两种。</p>
+<ul>
+<li><p>全局作用域（Global Scope）在代码中任何地方都能访问到的对象拥有全局作用域</p>
+<ul>
+<li>最外层函数和在最外层函数外面定义的变量拥有全局作用域，例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var authorName=&quot;山边小溪&quot;;</div><div class="line">function doSomething()&#123;</div><div class="line">    var blogName=&quot;梦想天空&quot;;</div><div class="line">    function innerSay()&#123;</div><div class="line">        alert(blogName);</div><div class="line">    &#125;</div><div class="line">    innerSay();</div><div class="line">&#125;</div><div class="line">alert(authorName); //山边小溪</div><div class="line">alert(blogName); //脚本错误</div><div class="line">doSomething(); //梦想天空</div><div class="line">innerSay() //脚本错误</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>所有末定义直接赋值的变量自动声明为拥有全局作用域，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function doSomething()&#123;</div><div class="line">    var authorName=&quot;山边小溪&quot;;</div><div class="line">    blogName=&quot;梦想天空&quot;;</div><div class="line">    alert(authorName);</div><div class="line">&#125;</div><div class="line">doSomething(); //山边小溪</div><div class="line">alert(blogName); //梦想天空</div><div class="line">alert(authorName); //脚本错误</div></pre></td></tr></table></figure>
+</li>
+<li><p>所有window对象的属性拥有全局作用域<br>　　一般情况下，window对象的内置属性都拥有全局作用域，例如window.name、window.location、window.top等等。</p>
+</li>
+<li><p>局部作用域（Local Scope）　　<br>　　和全局作用域相反，局部作用域一般只在固定的代码片段内可访问到，最常见的例如函数内部，所有在一些地方也会看到有人把这种作用域称为函数作用域，例如下列代码中的blogName和函数innerSay都只拥有局部作用域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function doSomething()&#123;</div><div class="line">    var blogName=&quot;梦想天空&quot;;</div><div class="line">    function innerSay()&#123;</div><div class="line">        alert(blogName);</div><div class="line">    &#125;</div><div class="line">    innerSay();</div><div class="line">&#125;</div><div class="line">alert(blogName); //脚本错误</div><div class="line">innerSay(); //脚本错误</div></pre></td></tr></table></figure>
+</li>
+<li><p>作用域链（Scope Chain）<br>　　在JavaScript中，函数也是对象，实际上，JavaScript里一切都是对象。函数对象和其它对象一样，拥有可以通过代码访问的属性和一系列仅供JavaScript引擎访问的内部属性。其中一个内部属性是[[Scope]]，由ECMA-262标准第三版定义，该内部属性包含了函数被创建的作用域中对象的集合，这个集合被称为函数的作用域链，它决定了哪些数据能被函数访问。<br>　　当一个函数创建后，它的作用域链会被创建此函数的作用域中可访问的数据对象填充。例如定义下面这样一个函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function add(num1,num2) &#123;</div><div class="line">    var sum = num1 + num2;</div><div class="line">    return sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>　　函数add的作用域将会在执行时用到。例如执行如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var total = add(5,10);</div></pre></td></tr></table></figure></p>
+<p>　　执行此函数时会创建一个称为“运行期上下文(execution context)”的内部对象，运行期上下文定义了函数执行时的环境。每个运行期上下文都有自己的作用域链，用于标识符解析，当运行期上下文被创建时，而它的作用域链初始化为当前运行函数的[[Scope]]所包含的对象。<br>　　这些值按照它们出现在函数中的顺序被复制到运行期上下文的作用域链中。它们共同组成了一个新的对象，叫“活动对象(activation object)”，该对象包含了函数的所有局部变量、命名参数、参数集合以及this，然后此对象会被推入作用域链的前端，当运行期上下文被销毁，活动对象也随之销毁。<br>　　在函数执行过程中，没遇到一个变量，都会经历一次标识符解析过程以决定从哪里获取和存储数据。该过程从作用域链头部，也就是从活动对象开始搜索，查找同名的标识符，如果找到了就使用这个标识符对应的变量，如果没找到继续搜索作用域链中的下一个对象，如果搜索完所有对象都未找到，则认为该标识符未定义。函数执行过程中，每个标识符都要经历这样的搜索过程。<br>作用域链和代码优化<br>　　从作用域链的结构可以看出，在运行期上下文的作用域链中，标识符所在的位置越深，读写速度就会越慢。<strong>因为全局变量总是存在于运行期上下文作用域链的最末端，因此在标识符解析的时候，查找全局变量是最慢的。所以，在编写代码的时候应尽量少使用全局变量，尽可能使用局部变量。一个好的经验法则是：如果一个跨作用域的对象被引用了一次以上，则先把它存储到局部变量里再使用。</strong>例如下面的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function changeColor()&#123;</div><div class="line">    document.getElementById(&quot;btnChange&quot;).onclick=function()&#123;</div><div class="line">    document.getElementById(&quot;targetCanvas&quot;).style.backgroundColor=&quot;red&quot;;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　这个函数引用了两次全局变量document，查找该变量必须遍历整个作用域链，直到最后在全局对象中才能找到。这段代码可以重写如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function changeColor()&#123;</div><div class="line">    var doc=document;</div><div class="line">    doc.getElementById(&quot;btnChange&quot;).onclick=function()&#123;</div><div class="line">    doc.getElementById(&quot;targetCanvas&quot;).style.backgroundColor=&quot;red&quot;;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　<strong>这段代码比较简单，重写后不会显示出巨大的性能提升，但是如果程序中有大量的全局变量被从反复访问，那么重写后的代码性能会有显著改善。</strong><br>改变作用域链<br>　　函数每次执行时对应的运行期上下文都是独一无二的，所以多次调用同一个函数就会导致创建多个运行期上下文，当函数执行完毕，执行上下文会被销毁。每一个运行期上下文都和一个作用域链关联。<br>　　另外一个会改变作用域链的是try-catch语句中的catch语句。<strong>当try代码块中发生错误时，执行过程会跳转到catch语句</strong>，然后把异常对象推入一个可变对象并置于作用域的头部。在catch代码块内部，函数的所有局部变量将会被放在第二个作用域链对象中。示例代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">try&#123;</div><div class="line">    doSomething();</div><div class="line">&#125;catch(e)&#123;</div><div class="line">    alert(e.message); //作用域链在此处改变</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　请注意，一旦catch语句执行完毕，作用域链机会返回到之前的状态。try-catch语句在代码调试和异常处理中非常有用，因此不建议完全避免。你可以通过优化代码来减少catch语句对性能的影响。一个很好的模式是将错误委托给一个函数处理，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">try&#123;</div><div class="line">    doSomething();</div><div class="line">&#125;catch(ex)&#123;</div><div class="line">    handleError(ex); //委托给处理器方法</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　优化后的代码，handleError方法是catch子句中唯一执行的代码。该函数接收异常对象作为参数，这样你可以更加灵活和统一的处理错误。由于只执行一条语句，且没有局部变量的访问，作用域链的临时改变就不会影响代码性能了。</p>
+<h4 id="Javascript闭包（Closure）"><a href="#Javascript闭包（Closure）" class="headerlink" title="Javascript闭包（Closure）"></a>Javascript闭包（Closure）</h4><p>一、变量的作用域<br>变量的作用域无非就是两种：全局变量和局部变量。<br>Javascript语言的特殊之处，就在于函数内部可以直接读取全局变量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">　　var n=999;</div><div class="line">　　function f1()&#123;</div><div class="line">　　　　alert(n);</div><div class="line">　　&#125;</div><div class="line">　　f1(); // 999</div></pre></td></tr></table></figure></p>
+<p>另一方面，在函数外部自然无法读取函数内的局部变量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function f1()&#123;</div><div class="line">　　　　var n=999;</div><div class="line">　　&#125;</div><div class="line">　　alert(n); // error</div></pre></td></tr></table></figure></p>
+<p>这里有一个地方需要注意，函数内部声明变量的时候，一定要使用var命令。如果不用的话，你实际上声明了一个全局变量！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">　function f1()&#123;</div><div class="line">　　　　n=999;</div><div class="line">　　&#125;</div><div class="line">　　f1();</div><div class="line">　　alert(n); // 999</div></pre></td></tr></table></figure></p>
+<p>二、如何从外部读取局部变量？<br>出于种种原因，我们有时候需要得到函数内的局部变量。但是，前面已经说过了，正常情况下，这是办不到的，只有通过变通方法才能实现。<br>那就是在函数的内部，再定义一个函数。<br>　　function f1(){<br>　　　　var n=999;<br>　　　　function f2(){<br>　　　　　　alert(n); // 999<br>　　　　}<br>　　}<br>在上面的代码中，函数f2就被包括在函数f1内部，这时f1内部的所有局部变量，对f2都是可见的。但是反过来就不行，f2内部的局部变量，对f1就是不可见的。这就是Javascript语言特有的”链式作用域”结构（chain scope），子对象会一级一级地向上寻找所有父对象的变量。所以，父对象的所有变量，对子对象都是可见的，反之则不成立。<br>既然f2可以读取f1中的局部变量，那么只要把f2作为返回值，我们不就可以在f1外部读取它的内部变量了吗！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">　　function f1()&#123;</div><div class="line">　　　　var n=999;</div><div class="line">　　　　function f2()&#123;</div><div class="line">　　　　　　alert(n); </div><div class="line">　　　　&#125;</div><div class="line">　　　　return f2;</div><div class="line">　　&#125;</div><div class="line">　　var result=f1();</div><div class="line">　　result(); // 999</div></pre></td></tr></table></figure></p>
+<p>三、闭包的概念<br>上一节代码中的f2函数，就是闭包。<br><strong>闭包就是能够读取其他函数内部变量的函数。</strong><br><strong>由于在Javascript语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成”定义在一个函数内部的函数”。</strong><br><strong>所以，在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。</strong><br>四、闭包的用途<br>闭包可以用在许多地方。它的最大用处有两个，一个是前面提到的可以读取函数内部的变量，另一个就是<strong>让这些变量的值始终保持在内存中</strong>。<br>怎么来理解这句话呢？请看下面的代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">　　function f1()&#123;</div><div class="line">　　　　var n=999;</div><div class="line">　　　　nAdd=function()&#123;n+=1&#125;</div><div class="line">　　　　function f2()&#123;</div><div class="line">　　　　　　alert(n);</div><div class="line">　　　　&#125;</div><div class="line">　　　　return f2;</div><div class="line">　　&#125;</div><div class="line">　　var result=f1();</div><div class="line">　　result(); // 999</div><div class="line">　　nAdd();</div><div class="line">　　result(); // 1000</div></pre></td></tr></table></figure></p>
+<p>在这段代码中，<strong>result实际上就是闭包f2函数</strong>。它一共运行了两次，第一次的值是999，第二次的值是1000。这证明了，函数f1中的局部变量n一直保存在内存中，并没有在f1调用后被自动清除。<br>为什么会这样呢？原因就在于f1是f2的父函数，而f2被赋给了一个全局变量，这导致f2始终在内存中，而f2的存在依赖于f1，因此f1也始终在内存中，不会在调用结束后，被垃圾回收机制（garbage collection）回收。<br><strong>这段代码中另一个值得注意的地方，就是”nAdd=function(){n+=1}”这一行，首先在nAdd前面没有使用var关键字，因此nAdd是一个全局变量，而不是局部变量。其次，nAdd的值是一个匿名函数（anonymous function），而这个匿名函数本身也是一个闭包，所以nAdd相当于是一个setter，可以在函数外部对函数内部的局部变量进行操作。</strong><br>五、使用闭包的注意点<br>1）<strong>由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。</strong><br>2）闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。<br>六、思考题<br>如果你能理解下面两段代码的运行结果，应该就算理解闭包的运行机制了。<br>代码片段一。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">　var name = &quot;The Window&quot;;</div><div class="line">　　var object = &#123;</div><div class="line">　　　　name : &quot;My Object&quot;,</div><div class="line">　　　　getNameFunc : function()&#123;</div><div class="line">　　　　　　return function()&#123;</div><div class="line">　　　　　　　　return this.name;</div><div class="line">　　　　　　&#125;;</div><div class="line">　　　　&#125;</div><div class="line">　　&#125;;</div><div class="line">　　alert(object.getNameFunc()());</div></pre></td></tr></table></figure></p>
+<p>代码片段二。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">　　var name = &quot;The Window&quot;;</div><div class="line">　　var object = &#123;</div><div class="line">　　　　name : &quot;My Object&quot;,</div><div class="line">　　　　getNameFunc : function()&#123;</div><div class="line">　　　　　　var that = this;</div><div class="line">　　　　　　return function()&#123;</div><div class="line">　　　　　　　　return that.name;</div><div class="line">　　　　　　&#125;;</div><div class="line">　　　　&#125;</div><div class="line">　　&#125;;</div><div class="line">　　alert(object.getNameFunc()());</div></pre></td></tr></table></figure></p>
+<h4 id="网站为什么-JS-调用尽量放到网页底部？"><a href="#网站为什么-JS-调用尽量放到网页底部？" class="headerlink" title="网站为什么 JS 调用尽量放到网页底部？"></a>网站为什么 JS 调用尽量放到网页底部？</h4><p>因为浏览器渲染HTML页面是从上往下渲染的<br>即先执行head标签里的内容，再执行body标签里的，一行行渲染下去。<br>无论当前 JavaScript 代码是内嵌还是在外链文件中，页面的下载和渲染都必须停下来等待脚本执行完成。JavaScript 执行过程耗时越久，浏览器等待响应用户输入的时间就越长。所以JS尽量放底部可以有一定的性能优化效果。</p>
+<p><a href="http://www.ibm.com/developerworks/cn/web/1308_caiys_jsload/" target="_blank" rel="external">JavaScript 的性能优化：加载和执行</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#继承是如何实现的"><span class="nav-number">1.</span> <span class="nav-text">继承是如何实现的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#作用域"><span class="nav-number">2.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Javascript闭包（Closure）"><span class="nav-number">3.</span> <span class="nav-text">Javascript闭包（Closure）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网站为什么-JS-调用尽量放到网页底部？"><span class="nav-number">4.</span> <span class="nav-text">网站为什么 JS 调用尽量放到网页底部？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
