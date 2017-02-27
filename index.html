@@ -282,6 +282,336 @@
   
 
   <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/mobileEvent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="栋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术进阶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/27/mobileEvent/" itemprop="url">
+                  移动端事件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-27T18:52:24+08:00">
+                2017-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="移动端事件"><a href="#移动端事件" class="headerlink" title="移动端事件"></a>移动端事件</h4><blockquote>
+<p>移动端事件和PC端不太一样，处理方式也有区别</p>
+<ul>
+<li>touch单手指事件<ul>
+<li>touchstart<br>-</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="PC端事件"><a href="#PC端事件" class="headerlink" title="PC端事件"></a>PC端事件</h4><ul>
+<li>mouseover</li>
+<li>mouseenter区别：默认阻止了事件的冒泡传播</li>
+<li>mouseleave</li>
+<li>mousewheel</li>
+<li>mouseout</li>
+<li>mousedown</li>
+<li>mouseup</li>
+<li>contextmenu鼠标右键事件行为</li>
+<li>click点击（不是单击）与移动端不同</li>
+<li>dblclick双击</li>
+<li>resize:window.onresize当浏览器窗口大小发生改变触发这个事件</li>
+<li>unload：关闭</li>
+<li>DOMContentLoaded:DOM2独有的事件，JQ中的$(document).ready()就是采用这个事件来操作的，他的意思是当HTML结构加载完成就会触发这个事情区别于window.ready</li>
+<li>…<br>事件对象</li>
+<li>e</li>
+</ul>
+<p>事件传播机制：</p>
+<ul>
+<li>捕获阶段：从document来时一直查找到事件源</li>
+<li>冒泡阶段：从事件源开始一直传播到document</li>
+<li></li>
+</ul>
+<h4 id="移动端事件-1"><a href="#移动端事件-1" class="headerlink" title="移动端事件"></a>移动端事件</h4><p>区别：</p>
+<ul>
+<li>mouse系列的事件在手机端是不兼容的，也没法使用</li>
+<li>键盘相关系列的（key）在手机端也不兼容，因为手机端是虚拟的键盘=》这一系列事件我们使用input事件代替<br>其余的常用事件和PC端一样也存在，是不过部分事件表现形式不一样<blockquote>
+<p>在移动端虽然我们可以使用click，但是click事件存在300ms的延迟：当用户完成第一次点击操作的时候，浏览器会等待300ms来验证一下是否触发第二次，如果操作了就属于双击，否则为单击</p>
+</blockquote>
+</li>
+</ul>
+<p>但是在平时的项目操作中,我们是不想要这300ms延迟的，这样的话就不能使用click事件了，需要我们自己模拟出一个单击操作：</p>
+<blockquote>
+<p> touch事件模型，移动端专用的单手指事件模型，里面提供了常用的事件</p>
+<ul>
+<li>touchstart:手指按下触摸在屏幕上</li>
+<li>touchmove</li>
+<li>touchend手指离开屏幕</li>
+<li>touchcancel由于意外导致当前操作被中断执行（没什么卵用）<h5 id="移动端事件库：fastclick-js"><a href="#移动端事件库：fastclick-js" class="headerlink" title="移动端事件库：fastclick.js"></a>移动端事件库：fastclick.js</h5>专门解决移动端click事件300ms延迟的，如果你当前的项目中已经使用了click事件，我们想要解决300ms延迟的问题，一个个的把click替换太麻烦，fastClick帮我们解决这个问题</li>
+<li>它使用的是Touch事件模拟了一套tap点击操作</li>
+<li>当我们执行fastClick.attach的时候，参数传递进来的是哪一个元素，相当于把点击操作委托给了这个元素（事件委托）</li>
+<li>当这个容器中的任何一个元素发生点击的操作，都会执行我们自己制定的那一套tap机制<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&apos;fastClick.js&apos;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">	FastClick.attach(document.body);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<h5 id="百度云touch手势事件库：touch-0-2-14-min-js"><a href="#百度云touch手势事件库：touch-0-2-14-min-js" class="headerlink" title="百度云touch手势事件库：touch-0.2.14.min.js"></a>百度云touch手势事件库：touch-0.2.14.min.js</h5><blockquote>
+<p>over了</p>
+<h5 id="Zepto-js移动端的小型jQuery"><a href="#Zepto-js移动端的小型jQuery" class="headerlink" title="Zepto.js移动端的小型jQuery"></a>Zepto.js移动端的小型jQuery</h5><p>jQuery怎么用它怎么用</p>
+</blockquote>
+<p>区别：Zepto更适合移动端的开发</p>
+<ul>
+<li>Zepto更小<ul>
+<li>Zepto没有兼容IE低版本浏览器</li>
+<li>Zepto只实现了jQ常用的方法，很多的方法没有实现</li>
+</ul>
+</li>
+<li>Zepto的animate方法中提供了transform变形属性的设置，而jQ没有</li>
+<li>Zepto中提供了一些方法，而这些方法都是基于touch事件专门为移动端而准备的<ul>
+<li>tap点击</li>
+<li>singleTap</li>
+<li>doubleTap</li>
+<li>longTap</li>
+<li>swipe</li>
+<li>swipeLeft/Top/Right/Down<h5 id="移动端事件中的多手指事件"><a href="#移动端事件中的多手指事件" class="headerlink" title="移动端事件中的多手指事件"></a>移动端事件中的多手指事件</h5><blockquote>
+<p>gesture</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>gesturestart</li>
+<li>gesturechange</li>
+<li>gestureend</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/JavaScriptScope/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="栋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术进阶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/27/JavaScriptScope/" itemprop="url">
+                  JavaScript作用域
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-27T18:47:11+08:00">
+                2017-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="理解-JavaScript-作用域"><a href="#理解-JavaScript-作用域" class="headerlink" title="理解 JavaScript 作用域"></a>理解 JavaScript 作用域</h2><h3 id="JavaScript作用域"><a href="#JavaScript作用域" class="headerlink" title="JavaScript作用域"></a>JavaScript作用域</h3><p>　　任何程序设计语言都有作用域的概念，简单的说：作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。在JavaScript中，变量的作用域有全局作用域和局部作用域两种。</p>
+<ul>
+<li>全局作用域（Global Scope）在代码中任何地方都能访问到的对象拥有全局作用域</li>
+<li>最外层函数和在最外层函数外面定义的变量拥有全局作用域，例如：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var authorName=&quot;山边小溪&quot;;</div><div class="line">   function doSomething()&#123;</div><div class="line">       var blogName=&quot;梦想天空&quot;;</div><div class="line">       function innerSay()&#123;</div><div class="line">           alert(blogName);</div><div class="line">           &#125;</div><div class="line">       innerSay();</div><div class="line">       &#125;</div><div class="line">   alert(authorName); //山边小溪</div><div class="line">   alert(blogName); //脚本错误</div><div class="line">   doSomething(); //梦想天空</div><div class="line">   innerSay() //脚本错误</div></pre></td></tr></table></figure>
+<ul>
+<li>所有末定义直接赋值的变量自动声明为拥有全局作用域，例如：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function doSomething()&#123;</div><div class="line">       var authorName=&quot;山边小溪&quot;;</div><div class="line">       blogName=&quot;梦想天空&quot;;</div><div class="line">       alert(authorName);</div><div class="line">       &#125;</div><div class="line">   doSomething(); //山边小溪</div><div class="line">   alert(blogName); //梦想天空</div><div class="line">   alert(authorName); //脚本错误</div></pre></td></tr></table></figure>
+<p>变量blogName拥有全局作用域，而authorName在函数外部无法访问到。</p>
+<ul>
+<li>所有window对象的属性拥有全局作用域,一般情况下，window对象的内置属性都拥有全局作用域，例如window.name、window.location、window.top等等。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/angular/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -321,7 +651,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-27T12:40:54+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-27T12:41:10+08:00">
                 2017-02-27
               </time>
             
@@ -382,137 +712,6 @@
 <blockquote>
 <p>将数据挂载在viewModel上可以实现数据和模型的双向绑定</p>
 </blockquote>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/小总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="栋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="技术进阶">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/27/小总结/" itemprop="url">
-                  JavaScript作用域
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-27T12:07:47+08:00">
-                2017-02-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="理解-JavaScript-作用域"><a href="#理解-JavaScript-作用域" class="headerlink" title="理解 JavaScript 作用域"></a>理解 JavaScript 作用域</h2><h3 id="JavaScript作用域"><a href="#JavaScript作用域" class="headerlink" title="JavaScript作用域"></a>JavaScript作用域</h3><p>　　任何程序设计语言都有作用域的概念，简单的说：作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。在JavaScript中，变量的作用域有全局作用域和局部作用域两种。</p>
-<ul>
-<li>全局作用域（Global Scope）在代码中任何地方都能访问到的对象拥有全局作用域</li>
-<li>最外层函数和在最外层函数外面定义的变量拥有全局作用域，例如：</li>
-</ul>
-<figure class="highlight plain"><figcaption><span>authorName="山边小溪";</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function doSomething()&#123;</div><div class="line">    var blogName=&quot;梦想天空&quot;;</div><div class="line">    function innerSay()&#123;</div><div class="line">        alert(blogName);</div><div class="line">        &#125;</div><div class="line">    innerSay();</div><div class="line">    &#125;</div><div class="line">alert(authorName); //山边小溪</div><div class="line">alert(blogName); //脚本错误</div><div class="line">doSomething(); //梦想天空</div><div class="line">innerSay() //脚本错误</div></pre></td></tr></table></figure>
-<ul>
-<li>所有末定义直接赋值的变量自动声明为拥有全局作用域，例如：</li>
-</ul>
-<figure class="highlight plain"><figcaption><span>doSomething()&#123;</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">    var authorName=&quot;山边小溪&quot;;</div><div class="line">    blogName=&quot;梦想天空&quot;;</div><div class="line">    alert(authorName);</div><div class="line">    &#125;</div><div class="line">doSomething(); //山边小溪</div><div class="line">alert(blogName); //梦想天空</div><div class="line">alert(authorName); //脚本错误</div></pre></td></tr></table></figure>
-<p>变量blogName拥有全局作用域，而authorName在函数外部无法访问到。</p>
-<ul>
-<li>所有window对象的属性拥有全局作用域,一般情况下，window对象的内置属性都拥有全局作用域，例如window.name、window.location、window.top等等。</li>
-</ul>
 
           
         
@@ -816,7 +1015,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
