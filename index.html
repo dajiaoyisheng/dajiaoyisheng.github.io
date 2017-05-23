@@ -281,6 +281,206 @@
   
   
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/23/Interview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="栋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术进阶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/23/Interview/" itemprop="url">
+                  未命名
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-23T20:59:16+08:00">
+                2017-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><h4 id="搜狗"><a href="#搜狗" class="headerlink" title="搜狗"></a>搜狗</h4><ol>
+<li>doctype的作用是什么?页面中有没有它的区别是?<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>文档类型， 用来定义XML或(X)HTML的文件类型。浏览器会使用它来判断文档类型， 决定使用何种协议来解析，以及切换浏览器模式。</p>
+<p>为了能够很好地显示满足标准的页面，又能最大程度兼容不合法的HTML。 浏览器厂商一般会提供两种浏览器模式：</p>
+<ul>
+<li>标准模式：浏览器根据标准规约来渲染页面。</li>
+<li>混杂模式：浏览器采用更加宽松的、向后兼容的方式来渲染页面。</li>
+</ul>
+</blockquote>
+<p>如果你是使用最新标准编写的页面但未给出DOCTYPE声明，这时就可能会出现一些怪异的行为。 例如盒模型不正确、窗口的size不正确等问题。所以，尽量为你网站的所有页面都给出合法的DOCTYPE声明。</p>
+<ol>
+<li>w3c标准盒模型占位宽度是如何计算的?它与IE盒模型有什么不同?</li>
+</ol>
+<ul>
+<li>IE早期版本，包含IE6这些浏览器的width属性不是内容的宽度，而是内容+内边距+边框。</li>
+</ul>
+<ol>
+<li><p>请说下移动端常见的适配不同屏幕大小的方法?</p>
+<blockquote>
+<p>长度单位rem是相对于html标签的font-size来计算的。<br>让html的font-size等于窗口的宽比上设计稿的宽*100，这样的话1rem=100px</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">~(function (desW) &#123;</div><div class="line">var winW=document.documentElement.clientWidth;           document.documentElement.style.fontSize = winW / desW * 100 + &apos;px&apos;;</div><div class="line">        &#125;)(750)</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>一个高宽未知的图片如何在一个比它大的容器内水平垂直居中?</p>
+<blockquote>
+<p>background-position:center</p>
+</blockquote>
+</li>
+<li>label标签的作用是什么?</li>
+<li>定义链接四种状态的伪类的正确书写顺序是?<blockquote>
+<p>lvhfa<br>因为两个规则具有相同的特殊性时，后定义的规则优先<br>：link ：visited ：hover ：focus ：active</p>
+</blockquote>
+</li>
+<li><p>你知道的css选择器有哪些?</p>
+</li>
+<li><p>下面两个div的间距应该是多少?为什么?</p>
+<blockquote>
+<p>当两个或者更多垂直外边距相遇时，他们将形成一个外边距，这个外边距的高度等于两个发生叠加的外边距的高度中的较大者<br>只有普通文档流中块框的垂直外边距才会发生外边距叠加，行内框，浮动框或绝对定为框之间不会。</p>
+<div style="margin:5px"></div><div style="margin:10px"></div></blockquote>
+</li>
+<li>png8、png24的区别是什么?<blockquote>
+<p>“PNG8”是指8位索引色位图，“PNG24”是24位索引色位图；<br>每一张“png8”图像，都最多只能展示256（2的8次方）种颜色，8位的png其实支持不透明、索引透明、alpha透明。所以“png8”格式更适合那些颜色比较单一的图像，例如纯色、logo、图标等；因为颜色数量少，所以图片的体积也会更小；<br>png24支持2的24次方种颜色，表现为不透明。每一张“png24”图像，可展示的颜色就远远多于“png8”了，最多可展示的颜色数量多大1600万；所以“png24”所展示的图片颜色会更丰富，图片的清晰度也会更好，图片质量更高，当然图片的大小也会相应增加，所以“png24”的图片比较适合像摄影作品之类颜色比较丰富的图片；</p>
+</blockquote>
+</li>
+</ol>
+<ul>
+<li><p>如何判断图片是png8还是24：</p>
+<ul>
+<li>在ps里看图像—模式，png8当然只有8位/通道了。<br>2.当打开png8的图片时，ps会默认给它的图片标题上加上“索引”两字，png24的则没有。</li>
+</ul>
+</li>
+<li><p>ps切图时应遵循：<br>  1.色彩丰富的、大的图片切成jpg的；<br>  2.尺寸小的，色彩不丰富的和背景透明的切成gif或者png8的；<br>  3.半透明的切成png24。</p>
+</li>
+</ul>
+<ol>
+<li>png和jpg这两种图片格式分别适用的场景是?</li>
+</ol>
+<ul>
+<li>色彩丰富的、大的图片</li>
+</ul>
+<ol>
+<li><p>页面导入样式时，使用link和 @import有什么区别?</p>
+<blockquote>
+<p>本质上，这两种方式都是为了加载CSS文件，但还是存在着细微的差别<br>1 老祖宗的差别。link属于XHTML标签，而@import完全是CSS提供的一种方式。<br>link标签除了可以加载CSS外，还可以做很多其它的事情，比如定义RSS，定义rel连接属性等，@import就只能加载CSS了。<br>2 link引用的CSS会同时被加载，而@import引用的CSS会等到页面全部被下载完再被加载。所以有时候浏览@import加载CSS的页面时开始会没有样式（就是闪烁），网速慢的时候还挺明显.<br>3 @import只有在IE5以上的才能识别，而link标签无此问题。<br>4 当使用javascript控制dom去改变样式的时候，只能使用link标签，因为@import不是dom可以控制的。<br>12.请介绍下css中针对ie6-9常用的hack方法</p>
+</blockquote>
+</li>
+<li><p>Javascript的基本数据类型有哪些?</p>
+<blockquote>
+<p>6 种 原始类型:<br>Boolean<br>Null<br>Undefined<br>Number<br>String<br>Symbol (ECMAScript 6 新定义)<br>和 Object</p>
+</blockquote>
+</li>
+</ol>
+<p>14.请介绍下Javascript原型、原型链的特点?</p>
+<blockquote>
+<p>每个函数数据类型（普通函数和构造函数）上都有一个属性，叫做prototype;prototype是个对象，<br>prototype这个对象上，存放的都是公有的属性和方法，天生自带一个属性constructor指向当前这构造函数,<br>每个对象数据类型上，都有一个<strong>proto</strong>属性，指向当前实例所属类的原型上；<br>15.曾经用原生Javascript实现过什么功能?</p>
+</blockquote>
+<ol>
+<li>请用jquery和原生Js分别实现添加、移除、移动、复制、创建和查找DOM节点<br>（1）创建新节点<br>  createDocumentFragment()    //创建一个DOM片段<br>createElement()   //创建一个具体的元素<br>createTextNode()   //创建一个文本节点<br>（2）添加、移除、替换、插入<br>  appendChild()<br>  removeChild()<br>  replaceChild()<br>  insertBefore()<br>（3）查找<br>  getElementsByTagName()    //通过标签名称<br>  getElementsByName()    //通过元素的Name属性的值<br>  getElementById()    //通过元素Id，唯一性</li>
+<li>实时监测用户在input内输入的字符数应该监听哪个事件?<br>遇到如此需求，首先想到的是change事件，但用过change的都知道只有在input失去焦点时才会触发，并不能满足实时监测的需求，比如监测用户输入字符数。<br>现代浏览器的input有oninput这一属性<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$(&apos;#test&apos;).on(&apos;input&apos;,function()&#123;</div><div class="line">    alert(&apos;input&apos;);</div><div class="line">&#125;)</div><div class="line">//for ie</div><div class="line">if(document.all)&#123;</div><div class="line">    $(&apos;input[type=&quot;text&quot;]&apos;).each(function() &#123;</div><div class="line">        var that=this;</div><div class="line">        if(this.attachEvent) &#123;</div><div class="line">            this.attachEvent(&apos;onpropertychange&apos;,function(e) &#123;</div><div class="line">                if(e.propertyName!=&apos;value&apos;) return;</div><div class="line">                $(that).trigger(&apos;input&apos;);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
   <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/mobileEvent/">
 
@@ -1015,7 +1215,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
